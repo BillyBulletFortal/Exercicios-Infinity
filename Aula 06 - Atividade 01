@@ -1,0 +1,7 @@
+#Crie um programa que converta metros para centímetros.
+#Peça ao usuário para digitar um valor em metros, armazene
+#em uma variável e converta para centímetros.
+
+m=input("Digite um valor em metros usando ponto como separador de decimais e dois algarismos decimais ==>  ")
+cm=m*100
+print("O valor digitado transformado em centímetros é: ==>  ", cm)
