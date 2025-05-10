@@ -1,0 +1,311 @@
+CREATE DATABASE biblioteca;
+USE biblioteca;
+
+CREATE TABLE autores(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    idade INT,
+    nacionalidade VARCHAR(30),
+    status_vivo BOOL
+);
+
+
+CREATE TABLE livros(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(60) NOT NULL,
+    genero VARCHAR(35),
+	preco DECIMAL(6,2),
+	id_autor INT NOT NULL,
+    FOREIGN KEY (id_autor) REFERENCES autores (id)
+);
+
+
+
+INSERT INTO autores (nome, idade, nacionalidade, status_vivo) VALUES
+('Machado de Assis', 69, 'Brasileiro', 0),
+('Clarice Lispector', 56, 'Brasileira', 0),
+('J.K. Rowling', 58, 'Britânica', 1),
+('George Orwell', 46, 'Britânico', 0),
+('Stephen King', 76, 'Americano', 1),
+('Haruki Murakami', 75, 'Japones', 1);
+
+
+INSERT INTO autores (nome, idade, nacionalidade, status_vivo) VALUES
+('J.R.R Tolkien', 72, 'Britânico', 0);
+
+INSERT INTO livros (titulo, genero, preco, id_autor) VALUES
+('Dom Casmurro', 'Romance', 34.90, 1),
+('Memórias Póstumas de Brás Cubas', 'Ficção', 29.50, 1),
+('A Hora da Estrela', 'Romance', 24.90, 2),
+('Harry Potter e a Pedra Filosofal', 'Fantasia', 39.90, 3),
+('Harry Potter e a Câmara Secreta', 'Fantasia', 42.00, 3),
+('1984', 'Distopia', 33.00, 4),
+('A Revolução dos Bichos', 'Sátira', 27.50, 4),
+('O Iluminado', 'Terror', 45.00, 5),
+('It: A Coisa', 'Terror', 59.90, 5),
+('Kafka à Beira-Mar', 'Ficção', 49.00, 6);
+
+
+
+
+
+SELECT * FROM livros;
+SELECT * FROM autores;
+SELECT * FROM livros WHERE preco > 30;
+SELECT titulo, genero, preco FROM livros ORDER BY preco DESC;
+SELECT nome, nacionalidade FROM autores;
+SELECT genero, COUNT(*) AS total_livros FROM livros GROUP BY genero;
+
+
+
+SELECT
+	livros.titulo,
+    livros.genero,
+    livros.preco,
+    autores.nome,
+    autores.nacionalidade
+		FROM livros INNER JOIN autores
+        ON livros.id_autor = autores.id;
+        
+
+
+SELECT
+	livros.titulo,
+    livros.genero,
+    livros.preco,
+    autores.nome,
+    autores.nacionalidade
+		FROM livros INNER JOIN autores
+        ON livros.id_autor = autores.id
+			WHERE autores.nacionalidade LIKE "%ileir%";
+            
+            
+            
+SELECT
+	livros.titulo,
+    livros.genero,
+    livros.preco,
+    autores.nome,
+    autores.nacionalidade
+		FROM livros INNER JOIN autores
+        ON livros.id_autor = autores.id
+			WHERE livros.titulo LIKE "%Potter%";
+            
+            
+            
+SELECT
+	livros.titulo,
+    livros.genero,
+    livros.preco,
+    autores.nome,
+    autores.nacionalidade
+		FROM livros RIGHT JOIN autores
+        ON livros.id_autor = autores.id;
+        
+
+SELECT
+	livros.titulo,
+    livros.genero,
+    livros.preco,
+    autores.nome,
+    autores.nacionalidade
+		FROM livros LEFT JOIN autores
+        ON livros.id_autor = autores.id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE DATABASE lojinha;
+USE lojinha;
+
+CREATE TABLE clientes(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    email VARCHAR(60) NOT NULL UNIQUE,
+    cpf CHAR(11) UNIQUE
+);
+
+
+CREATE TABLE produtos(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(60) NOT NULL,
+    marca VARCHAR(35) NOT NULL,
+    descricao TEXT,
+	preco DECIMAL(6,2) NOT NULL,
+	qtde_estoque INT NOT NULL
+);
+
+
+CREATE TABLE vendas(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    data_venda DATETIME NOT NULL,
+    qtde_vendidos INT NOT NULL,
+    id_cliente INT NOT NULL,
+    id_produto INT NOT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES clientes (id),
+    FOREIGN KEY (id_produto) REFERENCES produtos (id)
+);
+
+
+
+
+INSERT INTO clientes (nome, email, cpf) VALUES
+('Ana Clara', 'ana.clara@email.com', '12345678901'),
+('Bruno Souza', 'bruno.souza@email.com', '23456789012'),
+('Carla Mendes', 'carla.mendes@email.com', '34567890123'),
+('Daniel Rocha', 'daniel.rocha@email.com', '45678901234'),
+('Eduarda Lima', 'eduarda.lima@email.com', '56789012345'),
+('Felipe Martins', 'felipe.martins@email.com', '67890123456'),
+('Gabriela Freitas', 'gabriela.freitas@email.com', '78901234567'),
+('Henrique Alves', 'henrique.alves@email.com', '89012345678'),
+('Isabela Castro', 'isabela.castro@email.com', '90123456789'),
+('João Pedro', 'joao.pedro@email.com', '01234567890');
+
+
+
+INSERT INTO produtos (nome, marca, descricao, preco, qtde_estoque) VALUES
+('Teclado Mecânico', 'Logitech', 'Teclado RGB com switches azuis', 349.90, 20),
+('Mouse Gamer', 'Razer', 'Mouse com 16000 DPI', 249.90, 35),
+('Monitor 24"', 'Samsung', 'Monitor Full HD 75Hz', 899.90, 12),
+('Notebook i5', 'Dell', 'Notebook com 8GB RAM e SSD 256GB', 3999.90, 8),
+('Smartphone X', 'Apple', 'iPhone 13 128GB', 5499.90, 5),
+('Caixa de Som Bluetooth', 'JBL', 'Caixa portátil com graves potentes', 499.90, 18),
+('HD Externo 1TB', 'Seagate', 'USB 3.0', 299.90, 25),
+('SSD 512GB', 'Kingston', 'NVMe M.2', 379.90, 15),
+('Memória RAM 16GB', 'Corsair', 'DDR4 3200MHz', 429.90, 30),
+('Cadeira Gamer', 'ThunderX3', 'Cadeira ergonômica', 1299.90, 6),
+('Impressora', 'HP', 'Multifuncional Wi-Fi', 699.90, 10),
+('Tablet 10"', 'Samsung', 'Tela Full HD, 64GB', 1199.90, 7),
+('Fonte 650W', 'Corsair', '80 Plus Bronze', 459.90, 20),
+('Placa-mãe B550', 'ASUS', 'Para Ryzen', 799.90, 10),
+('Placa de Vídeo RTX 3060', 'NVIDIA', '12GB GDDR6', 2499.90, 4),
+('Cooler CPU', 'Cooler Master', 'Air Cooler Dual Fan', 199.90, 22),
+('Pen Drive 64GB', 'SanDisk', 'USB 3.1', 79.90, 50),
+('Cabo HDMI 2m', 'Philips', 'Alta definição', 39.90, 60),
+('Webcam Full HD', 'Logitech', 'Vídeo 1080p', 329.90, 9),
+('Hub USB 4 portas', 'TP-Link', 'USB 3.0', 89.90, 40);
+
+
+
+INSERT INTO vendas (data_venda, qtde_vendidos, id_cliente, id_produto) VALUES
+('2025-05-01 14:20:00', 1, 1, 2),
+('2025-05-02 10:45:00', 2, 3, 5),
+('2025-05-03 16:30:00', 1, 2, 4),
+('2025-05-04 11:15:00', 1, 6, 10),
+('2025-05-05 13:10:00', 3, 4, 7),
+('2025-05-06 09:25:00', 1, 8, 1),
+('2025-05-07 17:40:00', 2, 5, 3),
+('2025-05-08 15:05:00', 1, 9, 14);
+,
+
+
+
+
+
+pip install mysql-connector-python
+
+
+
+
+
+
+import mysql.connector
+
+db_config = {
+  "host": "localhost",
+  "user": "root",
+  "password": "Mysql102030",
+  "database": "lojinha"
+}
+
+
+
+def adicionarProduto():
+  conexao = mysql.connector.connect(**db_config)
+  janelinha = conexao.cursor(dictionary=True)
+  nome = input("Digite o nome do produto: ")
+  marca = input("Digite a marca do produto: ")
+  descricao = input("Digite a descrição do produto: ")
+  preco = float(input("Digite o preço do produto: "))
+  qtde_estoque = int(input("Digite a quantidade de estoque do produto: "))
+  
+  janelinha.execute(f"""
+    INSERT INTO produtos (nome, marca, descricao, preco, qtde_estoque)
+      VALUES
+        ('{nome}', '{marca}', '{descricao}', {preco}, {qtde_estoque});
+                    """)
+  conexao.commit()
+  janelinha.close()
+  conexao.close()
+  print("Deu certo ó man")
+
+def mostrarProdutos():
+  conexao = mysql.connector.connect(**db_config)
+  janelinha = conexao.cursor(dictionary=True)
+  janelinha.execute("SELECT * FROM produtos")
+  lista_de_produtos = janelinha.fetchall()
+  janelinha.close()
+  conexao.close()
+
+  for item_da_vez in lista_de_produtos:
+    print(f"""
+      ID: {item_da_vez['id']}
+      Nome: {item_da_vez['nome']}
+      Marca: {item_da_vez['marca']}
+      Descrição: {item_da_vez['descricao']}
+      Preço: {item_da_vez['preco']}
+      Quantidade no Estoque: {item_da_vez['qtde_estoque']}
+        """)
+
+
+def deletarProduto():
+  conexao = mysql.connector.connect(**db_config)
+  janelinha = conexao.cursor(dictionary=True)
+  id = int(input("Digite o id que você quer deletar: "))
+  
+  janelinha.execute(f"""
+        DELETE FROM produtos WHERE id = {id}
+                    """)
+  conexao.commit()
+  janelinha.close()
+  conexao.close()
+  print("Deu certo ó man")
+  
+  
+
+while True:
+  menu = input("""
+        Escolha uma opção:
+        1 - Adicionar Produto
+        2 - Ver Todos os Produtos
+        3 - Editar Produto
+        4 - Excluir Produto
+        0 - Sair
+        """)
+  if menu == "1":
+      adicionarProduto()
+  elif menu == "2":
+      mostrarProdutos()
+  elif menu == "3":
+      ...
+  elif menu == "4":
+      deletarProduto()
+  elif menu == "0":
+      print("Fim do Programa")
+      break
+  else:
+      print("Opção inválida")
+
+
+
